@@ -1,15 +1,4 @@
-Built with the Next.js 13.5 App Router, tRPC, TypeScript, Prisma & Tailwind
-
-## Getting started
-
-To get started with this project, run
-
-```bash
-  git clone https://github.com/anandakbari/PdF-summerizer.git
-```
-
-and copy the .env.example variables into a separate .env file, fill them out & and that's all you need to get started!
-
+Built with the Next.js, App Router, tRPC, TypeScript, Prisma & Tailwind
 ## Landing Page
 ![image](https://github.com/user-attachments/assets/730673dc-e0bc-4c54-b695-4b9bc0b3868f)
 
@@ -23,3 +12,13 @@ and copy the .env.example variables into a separate .env file, fill them out & a
 
 ![image](https://github.com/user-attachments/assets/b8a52c99-d8ac-477b-9b04-f5a9f61fd7d7)
 
+
+## Getting started
+
+To get started with this project, run
+
+```bash
+  git clone https://github.com/anandakbari/PdF-summerizer.git
+```
+
+and copy the .env.example variables into a separate .env file, fill them out & and that's all you need to get started!
