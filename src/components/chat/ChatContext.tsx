@@ -17,7 +17,12 @@ type StreamResponse = {
   ) => void
   isLoading: boolean
 }
-
+interface Message {
+  id: string;
+  text: string;
+  isUserMessage: boolean;
+  createdAt: string;
+}
 export const ChatContext = createContext<StreamResponse>({
   addMessage: () => {},
   message: '',
@@ -153,7 +158,7 @@ export const ChatContextProvider = ({
             let isAiResponseCreated = old.pages.some(
               (page) =>
                 page.messages.some(
-                  (message) => message.id === 'ai-response'
+                  (message:Message) => message.id === 'ai-response'
                 )
             )
 
@@ -173,7 +178,7 @@ export const ChatContextProvider = ({
                   ]
                 } else {
                   updatedMessages = page.messages.map(
-                    (message) => {
+                    (message:Message) => {
                       if (message.id === 'ai-response') {
                         return {
                           ...message,

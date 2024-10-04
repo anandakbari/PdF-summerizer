@@ -64,8 +64,12 @@ export const POST = async (req: NextRequest) => {
       message,
       4
   )
+  interface Message {
+    isUserMessage: boolean;
+    text: string;
+  }
 
-  const prevMessages = await db.message.findMany({
+  const prevMessages:Message[]  = await db.message.findMany({
     where: {
       fileId,
     },
@@ -75,7 +79,7 @@ export const POST = async (req: NextRequest) => {
     take: 6,
   })
 
-  const formattedPrevMessages = prevMessages.map((msg) => ({
+  const formattedPrevMessages = prevMessages.map((msg:Message) => ({
     role: msg.isUserMessage
         ? ('user' as const)
         : ('assistant' as const),
