@@ -11,12 +11,11 @@ const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
 
 const DialogPortal = ({
-                          // Remove className from the destructured props
                           ...props
                       }: DialogPrimitive.DialogPortalProps) => (
-    // Remove className from the Portal component
     <DialogPrimitive.Portal {...props} />
 )
+
 DialogPortal.displayName = DialogPrimitive.Portal.displayName
 
 const DialogOverlay = React.forwardRef<
