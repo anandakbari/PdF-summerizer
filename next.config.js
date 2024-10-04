@@ -14,7 +14,9 @@ const nextConfig = {
       },
     ]
   },
-
+  images: {
+    domains: ['lh3.googleusercontent.com'], // Add the domain for external images
+  },
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, webpack }

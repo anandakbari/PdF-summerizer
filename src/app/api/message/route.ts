@@ -23,7 +23,7 @@ export const POST = async (req: NextRequest) => {
     return new Response('Unauthorized', { status: 401 })
 
   const { fileId, message } =
-    SendMessageValidator.parse(body)
+      SendMessageValidator.parse(body)
 
   const file = await db.file.findFirst({
     where: {
@@ -53,16 +53,16 @@ export const POST = async (req: NextRequest) => {
   const pineconeIndex = pinecone.Index('quill')
 
   const vectorStore = await PineconeStore.fromExistingIndex(
-    embeddings,
-    {
-      pineconeIndex,
-      namespace: file.id,
-    }
+      embeddings,
+      {
+        pineconeIndex,
+        namespace: file.id,
+      }
   )
 
   const results = await vectorStore.similaritySearch(
-    message,
-    4
+      message,
+      4
   )
 
   const prevMessages = await db.message.findMany({
@@ -77,8 +77,8 @@ export const POST = async (req: NextRequest) => {
 
   const formattedPrevMessages = prevMessages.map((msg) => ({
     role: msg.isUserMessage
-      ? ('user' as const)
-      : ('assistant' as const),
+        ? ('user' as const)
+        : ('assistant' as const),
     content: msg.text,
   }))
 
@@ -90,7 +90,7 @@ export const POST = async (req: NextRequest) => {
       {
         role: 'system',
         content:
-          'Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.',
+            'Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.',
       },
       {
         role: 'user',
@@ -100,10 +100,10 @@ export const POST = async (req: NextRequest) => {
   
   PREVIOUS CONVERSATION:
   ${formattedPrevMessages.map((message) => {
-    if (message.role === 'user')
-      return `User: ${message.content}\n`
-    return `Assistant: ${message.content}\n`
-  })}
+          if (message.role === 'user')
+            return `User: ${message.content}\n`
+          return `Assistant: ${message.content}\n`
+        })}
   
   \n----------------\n
   

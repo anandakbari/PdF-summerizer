@@ -7,6 +7,8 @@ import {
 
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
+import { TaskType } from "@google/generative-ai";
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 import { getPineconeClient } from '@/lib/pinecone'
 import { getUserSubscriptionPlan } from '@/lib/stripe'
@@ -49,15 +51,17 @@ const onUploadComplete = async ({
       key: file.key,
       name: file.name,
       userId: metadata.userId,
-      url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
+      url: file.url,
       uploadStatus: 'PROCESSING',
     },
   })
 
+
   try {
     const response = await fetch(
-      `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
+      file.url
     )
+    console.log(file.url)
 
     const blob = await response.blob()
 
@@ -97,16 +101,23 @@ const onUploadComplete = async ({
     const pineconeIndex = pinecone.Index('quill')
 
     const embeddings = new OpenAIEmbeddings({
-      openAIApiKey: process.env.OPENAI_API_KEY,
+      openAIApiKey: process.env.API_KEY,
     })
 
+    // const embeddings = new GoogleGenerativeAIEmbeddings({
+    //   model: "text-embedding-004", // 768 dimensions
+    //   taskType: TaskType.RETRIEVAL_DOCUMENT,
+    //   apiKey: process.env.GEMINI_API_KEY,
+    // });
+
     await PineconeStore.fromDocuments(
-      pageLevelDocs,
-      embeddings,
-      {
-        pineconeIndex,
-        namespace: createdFile.id,
-      }
+        pageLevelDocs,
+        embeddings,
+
+        {
+          pineconeIndex,
+          namespace: createdFile.id,
+        }
     )
 
     await db.file.update({
