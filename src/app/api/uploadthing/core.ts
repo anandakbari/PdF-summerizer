@@ -49,16 +49,15 @@ const onUploadComplete = async ({
       key: file.key,
       name: file.name,
       userId: metadata.userId,
-      url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
+      url: file.url,
       uploadStatus: 'PROCESSING',
     },
   })
 
   try {
     const response = await fetch(
-        `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
+        file.url,
     )
-
     const blob = await response.blob()
 
     const loader = new PDFLoader(blob)
