@@ -1,3 +1,6 @@
+## Deployed Link
+https://pdf-summerizer.vercel.app/
+
 Built with the Next.js, App Router, tRPC, TypeScript, Prisma & Tailwind
 ## Landing Page
 ![image](https://github.com/user-attachments/assets/730673dc-e0bc-4c54-b695-4b9bc0b3868f)
