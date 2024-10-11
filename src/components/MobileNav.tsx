@@ -41,7 +41,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                     }
                     className='flex items-center w-full font-semibold text-green-600'
                     href='/sign-up'>
-                    Get started
+                    Get
                     <ArrowRight className='ml-2 h-5 w-5' />
                   </Link>
                 </li>
