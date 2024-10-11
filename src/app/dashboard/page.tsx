@@ -16,11 +16,11 @@ const Page = async () => {
     }
   })
 
-  if(!dbUser) redirect('/auth-callback?origin=dashboard')
+  if(!dbUser) redirect('/auth-callback?origin=dashboard');
 
-  const subscriptionPlan = await getUserSubscriptionPlan()
+  const subscriptionPlan = await getUserSubscriptionPlan();
 
-  return <Dashboard subscriptionPlan={subscriptionPlan} />
+  return <Dashboard subscriptionPlan={subscriptionPlan} />;
 }
 
 export default Page

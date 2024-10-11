@@ -8,5 +8,5 @@ export const getPineconeClient = async () => {
     environment: 'us-east1-gcp',
   })
 
-  return client
+  return client;
 }

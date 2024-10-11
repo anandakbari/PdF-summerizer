@@ -14,7 +14,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 
   useEffect(() => {
     if (isOpen) toggleOpen()
-  }, [pathname])
+  }, [isOpen,pathname])
 
   const closeOnCurrent = (href: string) => {
     if (pathname === href) {
@@ -76,7 +76,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                       closeOnCurrent('/dashboard')
                     }
                     className='flex items-center w-full font-semibold'
-                    href='/dashboard'>
+                    href='/dashboard' >
                     Dashboard
                   </Link>
                 </li>

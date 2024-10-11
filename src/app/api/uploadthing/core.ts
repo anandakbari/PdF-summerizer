@@ -7,8 +7,6 @@ import {
 
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import { TaskType } from "@google/generative-ai";
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 import { getPineconeClient } from '@/lib/pinecone'
 import { getUserSubscriptionPlan } from '@/lib/stripe'
@@ -28,9 +26,9 @@ const middleware = async () => {
 }
 
 const onUploadComplete = async ({
-  metadata,
-  file,
-}: {
+                                  metadata,
+                                  file,
+                                }: {
   metadata: Awaited<ReturnType<typeof middleware>>
   file: {
     key: string
@@ -51,17 +49,15 @@ const onUploadComplete = async ({
       key: file.key,
       name: file.name,
       userId: metadata.userId,
-      url: file.url,
+      url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
       uploadStatus: 'PROCESSING',
     },
   })
 
-
   try {
     const response = await fetch(
-      file.url
+        `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
     )
-    console.log(file.url)
 
     const blob = await response.blob()
 
@@ -75,16 +71,16 @@ const onUploadComplete = async ({
     const { isSubscribed } = subscriptionPlan
 
     const isProExceeded =
-      pagesAmt >
-      PLANS.find((plan) => plan.name === 'Pro')!.pagesPerPdf
+        pagesAmt >
+        PLANS.find((plan) => plan.name === 'Pro')!.pagesPerPdf
     const isFreeExceeded =
-      pagesAmt >
-      PLANS.find((plan) => plan.name === 'Free')!
-        .pagesPerPdf
+        pagesAmt >
+        PLANS.find((plan) => plan.name === 'Free')!
+            .pagesPerPdf
 
     if (
-      (isSubscribed && isProExceeded) ||
-      (!isSubscribed && isFreeExceeded)
+        (isSubscribed && isProExceeded) ||
+        (!isSubscribed && isFreeExceeded)
     ) {
       await db.file.update({
         data: {
@@ -101,19 +97,12 @@ const onUploadComplete = async ({
     const pineconeIndex = pinecone.Index('quill')
 
     const embeddings = new OpenAIEmbeddings({
-      openAIApiKey: process.env.API_KEY,
+      openAIApiKey: process.env.OPENAI_API_KEY,
     })
-
-    // const embeddings = new GoogleGenerativeAIEmbeddings({
-    //   model: "text-embedding-004", // 768 dimensions
-    //   taskType: TaskType.RETRIEVAL_DOCUMENT,
-    //   apiKey: process.env.GEMINI_API_KEY,
-    // });
 
     await PineconeStore.fromDocuments(
         pageLevelDocs,
         embeddings,
-
         {
           pineconeIndex,
           namespace: createdFile.id,
@@ -142,11 +131,11 @@ const onUploadComplete = async ({
 
 export const ourFileRouter = {
   freePlanUploader: f({ pdf: { maxFileSize: '4MB' } })
-    .middleware(middleware)
-    .onUploadComplete(onUploadComplete),
+      .middleware(middleware)
+      .onUploadComplete(onUploadComplete),
   proPlanUploader: f({ pdf: { maxFileSize: '16MB' } })
-    .middleware(middleware)
-    .onUploadComplete(onUploadComplete),
+      .middleware(middleware)
+      .onUploadComplete(onUploadComplete),
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter
